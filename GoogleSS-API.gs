@@ -6,7 +6,7 @@ function doPost(e){
 var action = e.parameter.action;
 
   if(action == 'addItem'){
-    return addItem(e);
+    return test(e)
 
   }
 }
@@ -21,6 +21,42 @@ var action = e.parameter.action;
 
   }
   
+}
+
+function test(e){
+  
+  var date =  new Date();
+
+  var id  =  sheet.getLastRow(); // Item1
+  
+  const data = JSON.parse(e.postData.contents);
+  
+  const name = data.name;
+  
+  const dates = data.date;
+  
+  const time = data.time;
+  
+  const longitude = data.longitude;
+  
+  const latitude = data.latitude;
+  
+  const photo = data.photo;
+  
+  const hash = data.hash;
+  
+  sheet.appendRow([date, id, name, dates, time, longitude, latitude, photo, hash]);
+  
+  var result = {
+    status: 200,
+    message: 'Sukses',
+    result: 'Sukses Mnegirim Data',
+    error: []
+  };
+  
+  const final = JSON.stringify(result)
+
+return ContentService.createTextOutput(final).setMimeType(ContentService.MimeType.JSON);
 }
 
 
@@ -42,9 +78,11 @@ var latitude = e.parameter.longitude;
   
 var photo = e.parameter.photo;
   
+var hash = e.parameter.hash;
+  
   
 
-sheet.appendRow([date, id, name, dates, time, longitude, latitude, photo]);
+sheet.appendRow([date, id, name, dates, time, longitude, latitude, photo, hash]);
   
   var result = {
     status: 200,
@@ -75,6 +113,7 @@ function getItems(e){
     record['LONGITUDE']=row[5];
     record['LATITUDE']=row[6];
     record['PHOTO']=row[7];
+    record['HASH']=row[8];
     
     data.push(record);
     
